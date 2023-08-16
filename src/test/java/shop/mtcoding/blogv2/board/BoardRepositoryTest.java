@@ -1,15 +1,51 @@
 package shop.mtcoding.blogv2.board;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.repository.Query;
 
 import shop.mtcoding.blogv2.user.User;
 
 @DataJpaTest // 모든 repository, EntityManager 이렇게만 뜸. 다른건 띄울필요가없다. 
-public class BoardRepositoryTest {
+public class BoardRepositoryTest{
     @Autowired
     private BoardRepository boardRepository;
+
+    @Test
+    public void findAll_test(){
+        System.out.println("조회직전");
+        List<Board> boardList = boardRepository.findAll();
+        System.out.println("조회후:LAZY");
+        //행5개-> 객체5개
+        //각행 Board(id, title, content, creatrd_at, userId)
+        System.out.println(boardList.get(0).getId());  // 예상값 1
+        System.out.println(boardList.get(0).getUser().getId()); // 예상값 1
+
+        
+        System.out.println(boardList.get(0).getUser().getUsername());   
+        System.out.println(boardList.get(3).getUser().getUsername());   
+        //예상값 null <--- 전략이 LAZY이기 때문에 조회를 안함. 따라서 null 이 나와야함
+        // 실제로는 ssar이 조회됨. <--- Lazy Loading (지연로딩) 이 일어남
+        // 영속화된 객체의 null 값을 참조하려고하면 조회가 일어남.
+
+
+    }
+
+    
+        // @Query("select b from Board b join b.user")
+        // == select id, title, content, user_id, created_at from board_tb b inner join user_tb u on b.user_id = u.id;
+        // 위는 ORM 으로 연결해준거, 밑은 그냥 무식하게 다적은거.
+        // 그런데 전체를 프로젝션 하려면 fetch join 해줘야함.
+        // fetch 를 붙이면 참조중인 테이블을 참조해서 들어가서 참조된 테이블의 칼럼도 프로젝션해준다.
+        // 따라서 최종
+    // @Test
+    // @Query("select b from Board b join fetch b.user")
+    // List<Board> mFindAll_test();
+
+
 
     @Test
     public void save_test(){
@@ -68,15 +104,5 @@ public class BoardRepositoryTest {
                 .content("내용6")
                 .user(User.builder().id(1).build())
                 .build();
-                        
-
-
-
-
-
-
-
-
-        
     }
 }

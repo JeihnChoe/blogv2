@@ -31,7 +31,7 @@ public class UserRepositoryTest {
             user.builder().password("5678").build();  
          */  // 이렇게하면 password 업데이트되고 나머지 값들은 모두 null 이 된다.
 
-        user.setPassword("5678");
+        user.setPassword("5678"); // 어떤값을 넣을지는 받아와야함.
         userRepository.save(user);
     }
 }
