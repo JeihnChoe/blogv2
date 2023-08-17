@@ -19,9 +19,15 @@ import org.springframework.stereotype.Repository;
  * save(), findById(), findAll(), count(), deleteById()
  */
 
+/*
+ * 레파지토리가 해야하는 일
+ * DB에 CRUD함
+ * 메서드로 만들어져있음
+ */
+
+@Repository
 public interface BoardRepository extends JpaRepository<Board, Integer> {
                     // 상속받기 위해서 Entity, PK값의 타입형을 써준다.
-
         
     @Query("select b from Board b join b.user")
     // == select id, title, content, user_id, created_at from board_tb b inner join user_tb u on b.user_id = u.id;

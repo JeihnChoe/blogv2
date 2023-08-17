@@ -13,4 +13,23 @@ public class BoardRequest {
         private String content;
     }
     
+
+    @Getter
+    @Setter
+    public static class 업데이트조회DTO{
+        private String title;
+        private String content;
+        
+        public 업데이트조회DTO(String title, String content) {
+            this.title = title;
+            this.content = content;
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class 업데이트DTO{
+            private String title;
+            private String content;
+        }
 }
